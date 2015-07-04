@@ -1,0 +1,16 @@
+
+*
+{
+	margin:0px;
+	padding:0px;
+	border:none;
+	outline:none;
+}
+
+body
+{
+	width:100%;
+	height:100%;
+	overflow:hidden;
+	background:rgb(10,10,10);
+}
