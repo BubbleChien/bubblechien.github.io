@@ -1,0 +1,18 @@
+
+@font-face
+{
+	font-family:SourcePro;
+	src:url('./sourcepro.woff') format('woff'),
+		url('./sourcepro.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face
+{
+	font-family:SourceSans;
+	src:url('./sourcesans.woff') format('woff'),
+		url('./sourcesans.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}

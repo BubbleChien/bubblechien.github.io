@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>DrKanban :: Kanban Web Application</title>
+<link rel="stylesheet" type="text/css" href="../common/css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../common/fonts/fonts.css"/>
+<link rel="stylesheet" type="text/css" href="./css/kanban_desktop.css"/>
+<script type="text/javascript" src="../common/libs/jquery.js"></script>
+<script type="text/javascript" src="../common/libs/modernizr.js"></script>
+<script type="text/javascript" src="../common/source/kanban_common.js"></script>
+<script type="text/javascript" src="./source/kanban_desktop.js"></script>
+</head>
+<body>
+<script type="text/template" id="template_column">
+	<div class="column">
+		<div class="column_header">
+			<div class="column_header_left">
+				$name
+				&nbsp;
+				<span class="column_limit">
+					<span class="column_tasks_count">
+						$tasks
+					</span> / 
+					$limit
+				</span>
+				<span class="meta_hidden">$id</span>
+			</div>
+			<div class="column_header_right">
+				<button onclick="Kanban.G_App.OpenAddTaskDialog($id);" class="button_small icon_add">
+				</button>
+				<button onclick="Kanban.G_App.MoveColumn($id,Kanban.SWITCH_LEFT,$(this));" class="button_small icon_left">
+				</button>
+				<button onclick="Kanban.G_App.MoveColumn($id,Kanban.SWITCH_RIGHT,$(this));" class="button_small icon_right">
+				</button>
+				<button onclick="Kanban.G_App.RemoveColumn($id,$(this));" class="button_small icon_delete">
+				</button>
+			</div>
+		</div>
+		<div class="column_content">
+		</div>
+	</div>
+</script>
+<script type="text/template" id="template_task">
+	<div class="task">
+		<div class="task_header">
+			<div class="task_header_left">
+				$label
+				<span class="meta_hidden">$id</span>
+			</div>
+			<div class="task_header_right">
+				<button onclick="Kanban.G_App.EditTask($id,$(this));" class="button_small icon_edit">
+				</button>
+				<button onclick="Kanban.G_App.RemoveTask($id,$(this));" class="button_small icon_delete">
+				</button>
+			</div>
+		</div>
+		<div class="task_content">
+			<span class="task_desc">$desc</span><br/>
+			<br/>
+			<span class="task_small_info">
+				Created:&nbsp;&nbsp;&nbsp;<span class="task_added">$added</span><br/>
+				Moved:&nbsp;&nbsp;&nbsp;<span class="task_moved">$moved</span><br/>
+			</span>
+		</div>
+	</div>
+</script>
+<div id="toolbar">
+	<span id="header">
+	</span>
+	<button id="button_newProjectDialog" class="button_toolbar">
+		New Project
+	</button>
+	<button id="button_openProjectDialog" class="button_toolbar">
+		Open Project
+	</button>
+	<button id="button_addColumnDialog" class="button_toolbar">
+		Add Column
+	</button>
+</div>
+<div id="content">
+	<div id="content_wrap">
+	</div>
+	<div id="scroll_margin">
+	</div>
+</div>
+<div id="status_bar">
+	<div id="status_bar_left">
+		<span id="status_projectName">
+		</span>
+	</div>
+	<div id="status_bar_right">
+		<span id="icon_online">Online</span>
+		<span id="icon_offline">Offline</span>
+	</div>
+</div>
+<div id="tooltip">
+</div>
+<div id="dialog_back">
+</div>
+<div id="dialog_setClient" class="dialog">
+	Please choose a mode:<br/>
+	<br/>
+	<div class="centered">
+		<button id="button_setClientLocal" class="button">
+			Local Storage
+		</button><br/>
+		<button id="button_setClientNode" class="button">
+			Node Server
+		</button>
+	</div>
+</div>
+<div id="dialog_serverAddress" class="dialog">
+	Server address:<br/>
+	<input type="text" id="text_serverAddress" class="text_input"/><br/>
+	<br/>
+	<div class="centered">
+		<button id="button_connect" class="button">
+			Connect
+		</button>
+	</div>
+</div>
+<div id="dialog_authenticate" class="dialog">
+	Username:<br/>
+	<input type="text" id="text_username" class="text_input"/><br/>
+	Password:<br/>
+	<input type="password" id="text_password" class="text_input"/><br/>
+	<br/>
+	<div class="centered">
+		<button id="button_authenticate" class="button">
+			Validate
+		</button>
+	</div>
+</div>
+<div id="dialog_newProject" class="dialog">
+	Project name:<br/>
+	<input type="text" id="text_newProjectName" class="text_input"/><br/>
+	<br/>
+	<div class="centered">
+		<button id="button_newProject" class="button">
+			Create Project
+		</button><br/>
+		<button class="button cancel_button">
+			Cancel
+		</button>
+	</div>
+</div>
+<div id="dialog_openProject" class="dialog">
+	Select project:<br/>
+	<button id="select_openProject" class="select">
+	</button>
+	<div class="select_items">
+	</div><br/>
+	<br/>
+	<div class="centered">
+		<button id="button_openProject" class="button">
+			Open Project
+		</button><br/>
+		<button class="button cancel_button">
+			Cancel
+		</button>
+	</div>
+</div>
+<div id="dialog_addColumn" class="dialog">
+	Column name:<br/>
+	<input type="text" id="text_newColumnName" class="text_input"/><br/>
+	Tasks Limit (0=none):<br/>
+	<input type="text" id="text_columnLimit" class="text_input"/><br/>
+	<br/>
+	<div class="centered">
+		<button id="button_addColumn" class="button">
+			Add Column
+		</button><br/>
+		<button class="button cancel_button">
+			Cancel
+		</button>
+	</div>
+</div>
+<div id="dialog_addTask" class="dialog">
+	Task label:<br/>
+	<input type="text" id="text_newTaskLabel" class="text_input"/><br/>
+	Task description:<br/>
+	<textarea id="text_newTaskDesc" class="textarea_input"></textarea><br/>
+	<br/>
+	Task color:<br/>
+	<div id="task_colorChoice">
+	</div><br/>
+	<br/>
+	<div class="centered">
+		<button id="button_addTask" class="button">
+			Add Task
+		</button><br/>
+		<button class="button cancel_button">
+			Cancel
+		</button>
+	</div>
+</div>
+<div id="dialog_editTask" class="dialog">
+	Task description:<br/>
+	<textarea id="text_editTaskDesc" class="textarea_input"></textarea><br/>
+	<br/>
+	<div class="centered">
+		<button id="button_editTask" class="button">
+			Edit Task
+		</button><br/>
+		<button class="button cancel_button">
+			Cancel
+		</button>
+	</div>
+</div>
+<div id="dialog_confirmRemove" class="dialog">
+	Are you sure you want to remove this?<br/>
+	<br/>
+	<div class="centered">
+		<button id="button_confirmRemove" class="button">
+			Yes
+		</button>
+		<button class="button cancel_button">
+			No
+		</button>
+	</div>
+</div>
+<div id="dialog_waitingServer" class="dialog">
+	<div class="centered">
+		Waiting for datas...<br/>
+		<br/>
+		<img src="./images/loading.gif" alt="Loading..."/>
+	</div>
+</div>
+<div id="dialog_errorMessage" class="dialog">
+	<div id="div_errorMessage">
+	</div><br/>
+	<br/>
+	<div class="centered">
+		<button class="button cancel_button">
+			Close
+		</button>
+	</div>
+</div>
+</body>
+</html>
