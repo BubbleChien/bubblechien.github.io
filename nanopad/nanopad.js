@@ -15,14 +15,48 @@ NanoPad.Application = function()
 {
 	var _initialize = function()
 	{
-		if(!LS.getItem('test'))
+		$(document).resize(_onResize);
+		_onResize();
+		
+		$('#btn-load').click(_loadNote);
+		$('#btn-save').click(_saveNote);
+	};
+	
+	//
+	
+	var _onResize = function()
+	{
+		$('#content').height($(document).innerHeight()-32);
+	};
+	
+	//
+	
+	var _loadNote = function()
+	{
+		var name = $('#note-name').val();
+		var data = LS.getItem(name);
+		
+		if(data!==null)
 		{
-			LS.setItem('test','jjj');
+			$('#note').val(data);
+			$('#status').text('Note loaded.');
 		}
 		else
 		{
-			$('#content').text('KEY EXISTS');
+			$('#status').text('Unknown note.');
 		}
+	};
+	
+	//
+	
+	var _saveNote = function()
+	{
+		var name = $('#note-name').val();
+		
+		if(name==='') return;
+		
+		LS.setItem(name,$('#note').val());
+		$('#status').text('Note saved.');
 	};
 	
 	//
