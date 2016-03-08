@@ -1,5 +1,7 @@
 
-/// <reference path="typings/jquery/jquery.d.ts"/>
+document.createElement('main');
+
+//
 
 var Chien = {};
 

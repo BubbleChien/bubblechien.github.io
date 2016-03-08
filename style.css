@@ -36,6 +36,11 @@ body
 	font-size:17px;
 }
 
+main
+{
+	display: block;
+}
+
 #main-menu
 {
 	width: 100%;
