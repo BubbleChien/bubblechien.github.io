@@ -5,7 +5,7 @@ var G_NameGen = null;
 
 var NameGen = function()
 {
-	let m_vowels = 'AEIOUY';
+	let m_vowels = 'AAAEEEEIIIOOUUY';
 	let m_consonants = 'BCDFGHJKLMNPQRSTVWXZ';
 
 	let m_vmax = m_vowels.length-1;
