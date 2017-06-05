@@ -75,8 +75,6 @@ $(document).ready(function()
 			case 40: BCard.ScrollNext(); break;
 		}
 	});
-	
-	$(document).click(BCard.ScrollNext);
 
 	$(window).resize(BCard.OnResize);
 });
