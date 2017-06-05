@@ -1,0 +1,85 @@
+
+@font-face
+{
+	font-family: Questa;
+	font-style: normal;
+	font-weight: normal;
+	src: url('questa.woff');
+}
+
+@keyframes pulse
+{
+	0% { transform: scale(1.0, 1.0); }
+	50% { transform: scale(1.0, 1.0); }
+	75% { transform: scale(1.2, 1.2); }
+	100% { transform: scale(1.0, 1.0); }
+}
+
+*
+{
+	margin: 0px;
+	padding: 0px;
+}
+
+body
+{
+	width: 100%;
+	overflow: hidden;
+	font-family: Questa;
+	font-size: 8vh;
+	color: rgb(30, 30, 30);
+	cursor: default;
+}
+
+img
+{
+	max-height: 10vh;
+}
+
+.screen
+{
+	width: 100%;
+	height: 100vh;
+}
+
+.centered
+{
+	position: relative;
+	text-align: center;
+}
+
+.back-white
+{
+	background: rgb(230, 230, 230);
+}
+
+.back-green
+{
+	background: rgb(184, 229, 172);
+}
+
+.back-purple
+{
+	background: rgb(163, 170, 224);
+}
+
+.back-blue
+{
+	background: rgb(181, 210, 237);
+}
+
+.back-yellow
+{
+	background: rgb(237, 229, 178);
+}
+
+.back-red
+{
+	background: rgb(237, 142, 142);
+}
+
+.heart
+{
+	animation: pulse 1s ease-out;
+	animation-iteration-count: infinite;
+}
